@@ -152,7 +152,7 @@ app.get('/Historial', async (req, res) => {
                       datosFiltrados = datos.filter(dato => dato.direccion.includes(valor));
                   break;
               case 'usuario':
-                      datosFiltrados = datos.filter(dato => dato.idvendedor === valor);
+                      datosFiltrados = datos.filter(dato => dato.usuario === valor);
                   break;
               case 'movil':
                       datosFiltrados = datos.filter(dato => dato.movil.includes(valor));
