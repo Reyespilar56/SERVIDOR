@@ -9,7 +9,9 @@ app.listen(3000, () => {
 
 app.use(cors());
 app.use(express.json());
-//------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+//---Ventas---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+app.use(express.json({ limit: '1000mg' }));
+app.use(express.urlencoded({ limit: '1000mg', extended: true }));
 app.post("/instalacion", async (req, res) => {
   try {
     
@@ -51,7 +53,7 @@ app.post("/instalacion", async (req, res) => {
 
 //------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
-//DatoUsuario
+//DatoUsuarios
 app.post("/usuario", async (req, res) => {
   try {
     const {Nombre,Telefono,TelefonoMovil,Direccion,contrasena,correoElectronico,usuario,id } = req.body.data;
@@ -119,30 +121,26 @@ app.post("/usuario", async (req, res) => {
 
   
 //------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-//Historial
+//Historial ventas
+
+
 app.get('/Historial', async (req, res) => {
-  const { Zona, Usuario, Telefono, Fecha, Cliente, filtroTipo } = req.params;
+  const { filtroTipo, valor } = req.query;
+  console.log("DYGY",filtroTipo);
+  console.log("query", req.query);
 
   try {
       // Realizar la solicitud a la API externa
       const respuesta = await axios({
           method: "get",
           url: "https://installations-calendar-back.vercel.app/ventas/instalaciones-ventas",
-          params: {
-              direccion: Zona,
-              idvendedor: Usuario,
-              movil: Telefono,
-              fecha_instalacion: Fecha,
-              cliente: Cliente,
-          },
           headers: {
               'Content-Type': 'application/json'
           },
-          timeout: 5000 
       });
 
       const datos = respuesta.data;
-      console.log('Datos recibidos:', datos);
+      //console.log('Datos recibidos:', datos);
 
       let datosFiltrados = [];
 
@@ -152,38 +150,33 @@ app.get('/Historial', async (req, res) => {
       } else {
           switch (filtroTipo) {
               case 'cliente':
-                  if (Cliente) {
-                      datosFiltrados = datos.filter(dato => dato.cliente.includes(Cliente));
-                  }
+                      datosFiltrados = datos.filter(dato => dato.cliente.includes(valor));
                   break;
               case 'zona':
-                  if (Zona) {
-                      datosFiltrados = datos.filter(dato => dato.direccion.includes(Zona));
-                  }
+                      datosFiltrados = datos.filter(dato => dato.direccion.includes(valor));
                   break;
               case 'usuario':
-                  if (Usuario) {
-                      datosFiltrados = datos.filter(dato => dato.idvendedor === Usuario);
-                  }
+                      datosFiltrados = datos.filter(dato => dato.usuario === valor);
                   break;
               case 'movil':
-                  if (Telefono) {
-                      datosFiltrados = datos.filter(dato => dato.movil.includes(Telefono));
-                  }
+                      datosFiltrados = datos.filter(dato => dato.movil.includes(valor));
                   break;
+              case 'telefono':
+                    datosFiltrados = datos.filter(dato => dato.telefono.includes(valor));
+                break;
               case 'fecha':
-                  if (Fecha) {
-                      datosFiltrados = datos.filter(dato => dato.fecha_instalacion.includes(Fecha));
-                  }
+                      datosFiltrados = datos.filter(dato => dato.fecha_instalacion.includes(valor));
+                  break;
+                  case 'horaInstalacion':
+                      datosFiltrados = datos.filter(dato => dato.coordenadas.includes(valor));
                   break;
               default:
-         
+                
+
                   break;
           }
       }
-
-      console.log("datosFiltrados", datosFiltrados);
-      console.log("DYGY",filtroTipo);
+      //console.log("datosFiltrados", datosFiltrados);
       // Enviar la respuesta con los datos filtrados
       if (datosFiltrados && datosFiltrados.length > 0) {
           res.status(200).json(datosFiltrados);
