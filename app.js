@@ -166,13 +166,13 @@ app.get('/Historial', async (req, res) => {
                 break;
               case 'fecha':
                       datosFiltrados = datos.filter(dato => dato.fecha_instalacion.includes(valor));
+
                   break;
                   case 'horaInstalacion':
                       datosFiltrados = datos.filter(dato => dato.coordenadas.includes(valor));
                   break;
               default:
-                
-
+              
                   break;
           }
       }
