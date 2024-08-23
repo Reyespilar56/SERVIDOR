@@ -13,7 +13,7 @@ app.use(express.json());
 app.post("/instalacion", async (req, res) => {
   try {
 
-    const { Nombre, email, telefono, referencias, coordenadas, telefonocasa, domicilio, paquete, Hora, Minuto, Fecha, urlDisplay,newSrc } = req.body.data;
+    const { Nombre, email, telefono, referencias, coordenadas, telefonocasa, domicilio, paquete, Hora, Minuto, Fecha,URL_INE,URL_REVERSO,URL_DOMICILIO } = req.body.data;
     // Formatear la fecha y hora para enviar a la API de Mikrosystem
 
 
@@ -25,8 +25,14 @@ app.post("/instalacion", async (req, res) => {
         cliente: Nombre,
         email: email,
         movil: telefono,
-        Notas: `${referencias},\n${coordenadas},\n${paquete},${urlDisplay},${newSrc}`,// Concatenando
-        telefono: telefonocasa,
+        Notas: "REFERENCIAS: " + referencias + "\n" +
+        "COORDENADAS: " + coordenadas + "\n" +
+        "PAQUETE: " + paquete + "\n" +
+        "FOTO_INE: " + URL_INE + "\n" +
+        "FOTO_REVERSO: " + URL_REVERSO + "\n" +
+        "FOTO_DOMICILIO: " + URL_DOMICILIO,
+// Concatenan
+   telefono: telefonocasa,
         direccion: domicilio,
         cedula: req.body.data.ID,
         fecha_instalacion: `${Fecha},${Hora},${Minuto}`// Concatenando
@@ -47,9 +53,7 @@ app.post("/instalacion", async (req, res) => {
   }
 });
 
-//------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-
-//DatoUsuario
+//-----------------------DatoUsuario
 app.post("/usuario", async (req, res) => {
   try {
     const { Nombre, Telefono, TelefonoMovil, Direccion, contrasena, correoElectronico, usuario, id } = req.body.data;
@@ -81,8 +85,7 @@ app.post("/usuario", async (req, res) => {
   }
 });
 
-//------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-//Login 
+//------------Login 
 app.get("/Login", async (req, res) => {
   try {
     const { usuario, contrasena } = req.query; // Para solicitudes GET, se deben utilizar los parámetros de consulta
@@ -116,8 +119,7 @@ app.get("/Login", async (req, res) => {
 });
 
 
-//------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-//Historial
+//----Historial
 
 
 app.get('/Historial', async (req, res) => {
@@ -187,7 +189,7 @@ app.get('/Historial', async (req, res) => {
     res.status(500).send("Error en el servidor: " + error.message);
   }
 });
-//------------------------------------- Imagenes------------------------------------------------------
+
 
 
 
