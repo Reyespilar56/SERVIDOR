@@ -13,7 +13,7 @@ app.use(express.json());
 app.post("/instalacion", async (req, res) => {
   try {
 
-    const { Nombre, email, telefono, referencias, coordenadas, telefonocasa, domicilio, paquete, Hora, Minuto, Fecha,URL_INE,URL_REVERSO,URL_DOMICILIO } = req.body.data;
+    const { Nombre, email, telefono, referencias, coordenadas, telefonocasa, domicilio, paquete, Hora, Minuto, Fecha,URL_INE,URL_REVERSO,URL_DOMICILIO,notas } = req.body.data;
     // Formatear la fecha y hora para enviar a la API de Mikrosystem
 
 
@@ -30,7 +30,8 @@ app.post("/instalacion", async (req, res) => {
         "PAQUETE: " + paquete + "\n" +
         "FOTO_INE: " + URL_INE + "\n" +
         "FOTO_REVERSO: " + URL_REVERSO + "\n" +
-        "FOTO_DOMICILIO: " + URL_DOMICILIO,
+        "FOTO_DOMICILIO: " + URL_DOMICILIO +"\n"+
+        "NOTAS:" + notas,
 // Concatenan
    telefono: telefonocasa,
         direccion: domicilio,
