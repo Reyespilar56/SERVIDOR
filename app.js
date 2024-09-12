@@ -5,6 +5,7 @@ const cors = require("cors");
 
 app.listen(3000, () => {
   console.log("Servidor escuchando en el puerto 3000");
+
 });
 
 app.use(cors());
@@ -13,7 +14,7 @@ app.use(express.json());
 app.post("/instalacion", async (req, res) => {
   try {
 
-    const { Nombre, email, telefono, referencias, coordenadas, telefonocasa, domicilio, paquete, Hora, Minuto, Fecha,URL_INE,URL_REVERSO,URL_DOMICILIO,notas } = req.body.data;
+    const { Nombre, email, telefono, referencias, coordenadas, telefonocasa, domicilio, paquete, HoraIni,HoraFin, Minuto, FechaIni,FechaFin,URL_INE,URL_REVERSO,URL_DOMICILIO,notas,Cobro } = req.body.data;
     // Formatear la fecha y hora para enviar a la API de Mikrosystem
 
 
@@ -31,13 +32,19 @@ app.post("/instalacion", async (req, res) => {
         "FOTO_INE: " + URL_INE + "\n" +
         "FOTO_REVERSO: " + URL_REVERSO + "\n" +
         "FOTO_DOMICILIO: " + URL_DOMICILIO +"\n"+
-        "NOTAS:" + notas,
+        "NOTAS:" + notas +"\n"+ 
+
+        "FechaIni:"+FechaIni +"\n"+
+        "FechaFin:"+FechaFin+"\n"+
+        "HorarioIni:" +HoraIni+"\n"+
+        "HorarioFin:"+HoraFin,
 // Concatenan
    telefono: telefonocasa,
         direccion: domicilio,
         cedula: req.body.data.ID,
-        fecha_instalacion: `${Fecha},${Hora},${Minuto}`// Concatenando
+        fecha_instalacion: `${FechaIni},${FechaFin},${HoraIni},${HoraFin}`// Concatenando
       },
+      
 
       headers: {
         'Content-Type': 'application/json',
@@ -45,6 +52,7 @@ app.post("/instalacion", async (req, res) => {
       }
     });
 
+console.log("anticipo",Cobro);
 
     console.log("Respuesta de instalación:", respuesta.data);
     res.send("Instalación exitosa");
